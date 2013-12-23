@@ -1,0 +1,408 @@
+﻿<!DOCTYPE html>
+<html>
+  <head>
+    <title>smart reminder</title>
+      <link rel="stylesheet" type="text/css" href="css/index.css">
+      
+    <script type="text/javascript" charset="utf-8" src="cordova-2.7.0.js"></script>
+    <script type="text/javascript" charset="utf-8">
+
+        
+
+        var pictureSource;   // picture source
+        var destinationType; // sets the format of returned value
+        var db;
+        // Wait for Cordova to connect with the device
+        //
+        document.addEventListener("deviceready", onDeviceReady, false);
+
+        // Cordova is ready to be used!
+        //
+
+        function onDeviceReady() {
+            pictureSource = navigator.camera.PictureSourceType;
+            destinationType = navigator.camera.DestinationType;
+            
+        }
+
+        
+        // Called when a photo is successfully retrieved
+        //
+        function onPhotoDataSuccess(imageURI) {
+            // Uncomment to view the base64 encoded image data
+            //console.log(imageData);
+
+            // Get image handle
+            //
+           // var smallImage = document.getElementById('smallImage');
+
+            // Unhide image elements
+            //
+           // smallImage.style.display = 'block';
+
+            // Show the captured photo
+            // The inline CSS rules are used to resize the image
+            //
+           // smallImage.src = "data:image/jpeg;base64," + imageData;
+            var options = new FileUploadOptions();
+            options.fileKey = "image";
+            options.fileName = imageURI.substr(imageURI.lastIndexOf('/') + 1);
+            options.mimeType = "image/jpeg";
+
+            var params = new Object();
+            params.language = "en";
+            params.apikey = "qJQdC3vCkS";
+            params.MAX_FILE_SIZE = "100000000";
+
+            options.params = params;
+
+            var ft = new FileTransfer();
+            ft.upload(imageURI, encodeURI("http://api.ocrapiservice.com/1.0/rest/ocr"), win, fail, options);
+
+            document.getElementById('load').style.display = 'block';
+        }
+
+        // Called when a photo is successfully retrieved
+        //
+        function onPhotoURISuccess(imageURI) {
+            // Uncomment to view the image file URI 
+            console.log(imageURI);
+
+            // Get image handle
+            //
+            //var largeImage = document.getElementById('largeImage');
+
+            // Unhide image elements
+            //
+            //largeImage.style.display = 'block';
+
+            // Show the captured photo
+            // The inline CSS rules are used to resize the image
+            //
+            //largeImage.src = imageURI;
+            //document.data.image.value = imageURI;
+            var options = new FileUploadOptions();
+            options.fileKey = "image";
+            options.fileName = imageURI.substr(imageURI.lastIndexOf('/') + 1);
+            options.mimeType = "image/jpeg";
+
+            var params = new Object();
+            params.language = "en";
+            params.apikey = "qJQdC3vCkS";
+            params.MAX_FILE_SIZE = "100000000";
+
+            options.params = params;
+
+            var ft = new FileTransfer();
+            ft.upload(imageURI, encodeURI("http://api.ocrapiservice.com/1.0/rest/ocr"), win, fail, options);
+
+            document.getElementById('load').style.display = 'block';
+        }
+
+        
+        function win(r) {
+
+            document.getElementById('load').style.display = 'none';
+
+            wdata(r.responseCode, r.response);
+            console.log("Code = " + r.responseCode);
+            console.log("Response = " + r.response);
+            console.log("Sent = " + r.bytesSent);
+        }
+
+        function fail(error) {
+
+            document.getElementById('load').style.display = 'none';
+
+            alert("An error has occurred: Code = " + error.code);
+            console.log("upload error source " + error.source);
+            console.log("upload error target " + error.target);
+        }
+        // A button will call this function
+        //
+        function capturePhoto() {
+            // Take picture using device camera and retrieve image as base64-encoded string
+            navigator.camera.getPicture(onPhotoDataSuccess, onFail, {
+                quality:50,
+                destinationType: Camera.DestinationType.FILE_URI,
+                sourceType: Camera.PictureSourceType.CAMERA
+            });
+
+                /*{
+                quality: 50,
+                destinationType: destinationType.DATA_URL
+            });*/
+        }
+
+        // A button will call this function
+        //
+        function capturePhotoEdit() {
+            // Take picture using device camera, allow edit, and retrieve image as base64-encoded string  
+            navigator.camera.getPicture(onPhotoDataSuccess, onFail, {
+                quality: 20, allowEdit: true,
+                destinationType: destinationType.DATA_URL
+            });
+        }
+
+        // A button will call this function
+        //
+        function getPhoto(source) {
+            // Retrieve image file location from specified source
+            navigator.camera.getPicture(onPhotoURISuccess, onFail, {
+                quality: 50,
+                destinationType: destinationType.FILE_URI,
+                sourceType: source
+            });
+        }
+
+        // Called if something bad happens.
+        // 
+        function onFail(message) {
+            /*
+            if (message == "Selection cancelled.")
+                return;*/
+            alert('Failed because: ' + message);
+        }
+
+    </script>
+          <script type="text/javascript" charset="utf-8">
+
+          function onDeviceReady() {
+              // Empty
+          }
+
+          // Show a custom alert
+              //
+          //window.setInterval(showAlert, 10000);
+          function showalert(item) {
+
+              navigator.notification.alert(
+                  item.children[0].innerHTML,  // message
+                  item.children[1].innerHTML,            // title
+                  'reminder'                  // buttonName
+              );
+
+              navigator.notification.beep(3);
+              navigator.notification.vibrate(500);
+          }
+
+
+    </script>
+
+      
+
+  </head>
+  <body>
+      <div id="load">
+          
+          <div id="circularG">
+<div id="circularG_1" class="circularG">
+</div>
+<div id="circularG_2" class="circularG">
+</div>
+<div id="circularG_3" class="circularG">
+</div>
+<div id="circularG_4" class="circularG">
+</div>
+<div id="circularG_5" class="circularG">
+</div>
+<div id="circularG_6" class="circularG">
+</div>
+<div id="circularG_7" class="circularG">
+</div>
+<div id="circularG_8" class="circularG">
+</div>
+</div>
+      </div>
+
+      <div id="eventpage">
+          <label style="display: block;text-align:left; font-size:2em;">text</label><br />
+          <label id="exdata">
+
+          </label>
+          <label style="display: block;text-align:left; font-size:2em;">date</label><br />
+          <label id="exdate"></label>
+          <br />
+          <a onclick="yahoo()" style="display:block; font-size:2em;">Yahoo help !</a>
+
+
+          <br />
+          <div style="display: block;padding-top: 35px;">
+              <button onclick="set()" style="display:block; width:48%;height:5em; float: left">set reminder</button>
+              <button onclick="cancel()" style="display:block; width:48%;height:5em; float: left">cancel</button>
+          </div>
+
+          
+      </div>
+
+      <label id="header">smart reminder</label>
+      <br />
+    <label class='btn' onclick="capturePhoto();">Capture Photo</label> <br>
+    <label class='btn' onclick="getPhoto(pictureSource.PHOTOLIBRARY);">From Photo Library</label><br>
+    <img style="display:none;width:60px;height:60px;" id="smallImage" src="" />
+    <img style="display:none;" id="largeImage" src="" />
+
+
+      <label style="display:block; text-align:left; font-size: 3.5em;padding-top: 30px;">Upcoming events</label>
+      <div id="events">
+
+      </div>
+
+        <script src="js/jquery.min.js"></script>
+
+      <script>
+          function extractDate(string) {
+              var found = string.match(/(\d\d?)\/(\d\d?)\/(\d{2,4})/);
+              if (found == null) {
+                  var found1 = string.match(/(\d{1,2})-(\d{1,2})-(\d{2,4})/);
+                  if (found1 == null) {
+                      var found2 = string.match(/\d{1,2}\s[a-zA-Z]{3,8}\s\d{2,4}/);
+                      if (found2 == null) {
+                          var found3 = string.match(/\d{1,2}-[a-zA-Z]{3,8}-\d{2,4}/);
+                          if (found3 == null) {
+                              alert("No Date Found");
+                              return;
+                          }
+                          else {
+                              document.getElementById('eventpage').style.display = 'block';
+                              //alert(string.match(found3) + "\n" + string);
+                              document.getElementById('exdate').innerHTML = string.match(found3);
+                              document.getElementById('exdata').innerHTML = string;
+                              return;
+                          }
+                      }
+                      else {
+                          document.getElementById('eventpage').style.display = 'block';
+                          //alert(string.match(found2) + "\n" + string);
+                          document.getElementById('exdate').innerHTML = string.match(found2);
+                          document.getElementById('exdata').innerHTML = string;
+                          return;
+                      }
+                  }
+
+                  else {
+                      document.getElementById('eventpage').style.display = 'block';
+                      document.getElementById('exdate').innerHTML = string.match(found3);
+                      document.getElementById('exdata').innerHTML = string;
+                      //alert(string.match(found1) + "\n" + string);
+                      return;
+                  }
+              }
+              else {
+                  document.getElementById('eventpage').style.display = 'block';
+                  //alert(string.match(found) + "\n" + string);
+                  document.getElementById('exdate').innerHTML = string.match(found3);
+                  document.getElementById('exdata').innerHTML = string;
+                  return;
+              }
+          }
+      </script>
+      <script>
+          function wdata(code, res) {
+              if (code != 200) {
+                  alert("Please try again !!");
+                  return;
+              }
+              if (res == "") {
+                  alert("Please try again !!");
+                  return;
+              }
+
+              //alert(res);
+              extractDate(res);
+          }
+      </script>
+      <script>
+          var storage = window.localStorage;
+          //window.localStorage.clear();
+          /*var x =parseInt( window.localStorage.getItem("val"));
+          alert(++x);*/
+          if (window.localStorage.getItem("val") == null)
+              localStorage.setItem('val', "0");
+
+          function insertls(date, data) {
+              var i = window.localStorage.getItem("val");
+              i = (parseInt(i) + 1);
+              localStorage.setItem('id_' + i, "0");
+              localStorage.setItem('date_' + i, date);
+              localStorage.setItem('data_' + i, data);
+
+              localStorage.setItem('val', i);
+          }
+
+          //insertls("15-07-13", "friends bday")
+          //insertls("15-07-13", "good day !!!")
+          //window.localStorage.clear();
+          //alert(window.localStorage.getItem("val"));
+          //alert(window.localStorage.getItem("data_2"));
+      </script>
+      
+      <script>
+          function fetch() {
+              var i = parseInt(window.localStorage.getItem("val"));
+
+              var s = "<br>";
+              for (var x = 1; x <= i; x++) {
+                  s += "<div class='evnts' onclick='showalert(this)'><p>" + window.localStorage.getItem("data_" + x) + "</p><br><label>" + window.localStorage.getItem("date_" + x) + "</label></div>";
+              }
+
+              document.getElementById('events').innerHTML = s;
+
+          }
+
+          fetch();
+      </script>
+      <script>
+          //window.localStorage.clear();
+
+          function set() {
+              document.getElementById('eventpage').style.display = 'none';
+
+
+              var date = document.getElementById('exdate').innerHTML;
+              var data = document.getElementById('exdata').innerHTML;
+
+              insertls(date, data);
+              fetch();
+          }
+
+          function cancel() {
+              document.getElementById('eventpage').style.display = 'none';
+          }
+          </script>
+
+        <script>
+
+            function yahoo() {
+
+               jQuery.support.cors = true;
+                $.ajax({
+                    type: "GET",
+                    dataType: "text",
+                    //url: 'http://query.yahooapis.com/v1/public/yql?q=' + encodeURIComponent("select * from google.search where q = 'Yahoo! Hack Hyderabad' limit 1") + '&format=json&diagnostics=true&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys&callback=cbfunc',
+                    url: 'http://query.yahooapis.com/v1/public/yql?q=' + encodeURIComponent("select * from google.search where q = '"+document.getElementById('exdata').innerHTML.substr(0,20)+"' limit 1") + '&format=json&diagnostics=true&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys&callback=cbfunc',
+                    success: function (response) {
+                        // show text reply as-is (debug)
+
+
+                        alert(response);
+                        //alert(data.query.count);
+
+                        // show xml field values (debug)
+                        //alert( $(data).find("title").text() );
+
+                        // loop JSON array (debug)
+                        //var str="";
+                        //$.each(data.items, function(i,item) {
+                        //  str += item.title + "\n";
+                        //});
+                        //alert(str);
+                    },
+                    error: function (jqXHR, textStatus, ex) {
+                        alert(jqXHR.responseText);
+                    }
+                });
+            }
+        </script>
+  </body>
+</html>
